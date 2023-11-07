@@ -3,7 +3,7 @@
   <component name="Black">
     <option name="enabledOnReformat" value="true" />
     <option name="pathToExecutable" value="$USER_HOME$/anaconda3/bin/black" />
-    <option name="sdkUUID" value="7a1cc97c-7ccd-412b-bc5c-550a97fd8b55" />
+    <option name="sdkName" value="IDS706" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (Yilin-MiniProject5)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="IDS706" project-jdk-type="Python SDK" />
 </project>
