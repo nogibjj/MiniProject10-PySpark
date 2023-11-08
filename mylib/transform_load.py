@@ -1,29 +1,46 @@
-"""
-Transforms and Loads data into the local SQLite3 database
-Example:
-,general name,count_products,ingred_FPro,avg_FPro_products,
-avg_distance_root,ingred_normalization_term,semantic_tree_name,semantic_tree_node
-"""
-import sqlite3
-import csv
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 import os
 
-#load the csv file and insert into a new sqlite3 database
 def load(dataset="data/GroceryDB_IgFPro.csv"):
-    """"Transforms and Loads data into the local SQLite3 database"""
+    """Transforms and Loads data into the local SQLite3 database using Spark"""
+    # Initialize a Spark session
+    spark = SparkSession.builder \
+        .appName("GroceryDB_ETL") \
+        .config("spark.driver.extraClassPath", "path_to_sqlite_jdbc") \
+        .getOrCreate()
 
-    #prints the full working directory and path
+    # Define the schema of the CSV file
+    schema = StructType([
+        StructField("id", StringType(), True),
+        StructField("general_name", StringType(), True),
+        StructField("count_products", IntegerType(), True),
+        StructField("ingred_FPro", StringType(), True),
+        StructField("avg_FPro_products", StringType(), True),
+        StructField("avg_distance_root", StringType(), True),
+        StructField("ingred_normalization_term", StringType(), True),
+        StructField("semantic_tree_name", StringType(), True),
+        StructField("semantic_tree_node", StringType(), True)
+    ])
+
+    # Read the CSV file into a DataFrame
+    df = spark.read.csv(dataset, schema=schema, header=True)
+
+    # Show the directory for debugging purposes
     print(os.getcwd())
-    payload = csv.reader(open(dataset, newline=''), delimiter=',')
-    conn = sqlite3.connect('GroceryDB.db')
-    c = conn.cursor()
-    c.execute("DROP TABLE IF EXISTS GroceryDB")
-    c.execute("CREATE TABLE GroceryDB (id,general_name, count_products, ingred_FPro,"
-               "avg_FPro_products, avg_distance_root, ingred_normalization_term,"
-                " semantic_tree_name, semantic_tree_node)")
-    #insert
-    c.executemany("INSERT INTO GroceryDB VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)", payload)
-    conn.commit()
-    conn.close()
+
+    # Load the DataFrame into the SQLite database
+    # Note: The mode can be "overwrite", "append", "ignore", "error" (default).
+    df.write \
+      .format("jdbc") \
+      .option("url", "jdbc:sqlite:GroceryDB.db") \
+      .option("dbtable", "GroceryDB") \
+      .option("driver", "org.sqlite.JDBC") \
+      .mode("overwrite") \
+      .save()
+
+    spark.stop()
     return "GroceryDB.db"
 
+# Example usage
+load()
