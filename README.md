@@ -1,9 +1,9 @@
 ![Test Python Versions](https://github.com/nogibjj/IDS706-MiniProject5-Sqlite/actions/workflows/cicd.yml/badge.svg)
-# IDS706 Mini Project5: GroceryDB CRUD Application
+# IDS706 Mini Project10: GroceryDB CRUD Application
 
 ## Project Description
 
-This project is a simple Python application that interacts with a SQLite database named `GroceryDB`. It provides basic CRUD functionality: Create, Read, Update, and Delete operations on the `GroceryDB` database. It uses SQLite3 for database interaction and PrettyTable to display the query results in a tabular format.
+This project is a simple Python application that interacts with a SQLite database named `GroceryDB`. It provides basic CRUD functionality: Create, Read, Update, and Delete operations on the `GroceryDB` database. It is adpated from mini project while using Spark SQL.
 
 ## Queries Description & Results
 
